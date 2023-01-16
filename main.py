@@ -8,6 +8,7 @@ from defaulter.entity import config_entity
 from defaulter.entity.config_entity import DataIngestionConfig
 from defaulter.components import data_ingestion
 from defaulter.components.data_ingestion import DataIngestion
+from defaulter.components.data_validation import DataValidation
 
 #file_path="/config/workspace/aps_failure_training_set1.csv"
 #print(__name__)
@@ -20,7 +21,12 @@ if __name__=="__main__":
           training_pipeline_config=config_entity.TrainingPipelineConfig()
           data_ingestion_config=DataIngestionConfig(training_pipeline_config=training_pipeline_config)
           print(data_ingestion_config.to_dict())
-          data_ingestion=DataIngestion(data_ingestion_config=data_ingestion_config)
-          print(data_ingestion.initiate_data_ingestion())
+          data_ingestion = DataIngestion(data_ingestion_config=data_ingestion_config)
+          data_ingestion_artifact= data_ingestion.initiate_data_ingestion()
+          
+
+          data_validation_config=config_entity.DataValidationConfig(training_pipeline_config=training_pipeline_config)
+          data_validation = DataValidation(data_validation_config=data_validation_config, data_ingestion_artifact=data_ingestion_artifact)
+          data_validation_artifact = data_validation.initiate_data_validation()
      except Exception as e:
           print(e) 
